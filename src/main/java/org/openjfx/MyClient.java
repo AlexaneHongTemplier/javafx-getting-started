@@ -8,7 +8,7 @@ public class MyClient {
         try {
             Socket s = new Socket("localhost", 6666);
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF("Hello server");
+            dout.writeUTF("1");
             dout.flush();
             s.close();
         } catch (Exception e){
