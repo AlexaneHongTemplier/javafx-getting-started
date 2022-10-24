@@ -11,9 +11,9 @@ import javafx.scene.layout.VBox;
 
 public class MyChart extends VBox {
     private  XYChart.Series<Double, Double> series = new XYChart.Series<>();
+    int x = 0;
     public MyChart() {
         Button myB = new Button("Button");
-        final int[] x = {0};
         LineChart lc = new LineChart(
                 new NumberAxis("Time Constant", 0.0, 10.0, 30),
                 new NumberAxis("Voltage (Vs)", 0.0, 1.0, 0.1));
@@ -21,10 +21,8 @@ public class MyChart extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println("Button is working");
-                for (int i=0; i<10;i++) {
                     //series.getData().add(new XYChart.Data<>(Double.valueOf(i), Math.random()));
-                    buildSampleLineChart(i);
-                }
+                    buildSampleLineChart();
             }
         });
         lc.getData().add(series);
@@ -32,14 +30,14 @@ public class MyChart extends VBox {
         getChildren().add(lc);
     }
 
-    public void buildSampleLineChart(int x) {
+    public void buildSampleLineChart() {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 Runnable updater = new Runnable() {
                     @Override
                     public void run() {
-                            series.getData().add(new XYChart.Data<>(Double.valueOf(x), Math.random()));
+                            series.getData().add(new XYChart.Data<>(Double.valueOf(x++), Math.random()));
                             if (series.getData().size() > 10) {
                                 series.getData().remove(0);
                                 //xAxis.setLowerBound(series.getData().get(0).getXValue());
@@ -50,7 +48,7 @@ public class MyChart extends VBox {
                 };
                 while(true){
                     try{
-                        Thread.sleep(1000);
+                        Thread.sleep(200);
                     } catch (InterruptedException ex){}
                     Platform.runLater(updater);
                 }
