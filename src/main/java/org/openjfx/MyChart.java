@@ -7,18 +7,25 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+
+import javax.swing.*;
 
 public class MyChart extends VBox {
 
     private  XYChart.Series<Double, Double> series = new XYChart.Series<>();
     int x = 0;
+    public String ipAdress;
 
     public MyChart() {
-        Button myB = new Button("Button");
+        TextField textField = new TextField();
+        Button button = new Button("Send Data");
+        Button myB = new Button("Launch");
         LineChart lc = new LineChart(
                 new NumberAxis("Time Constant", 0.0, 100.0, 30),
                 new NumberAxis("Voltage (Vs)", 0.0, 1.0, 0.1));
+
         myB.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -27,7 +34,18 @@ public class MyChart extends VBox {
                     buildSampleLineChart();
             }
         });
+
+        button.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent actionEvent){
+                ipAdress = textField.getText();
+                System.out.println(ipAdress);
+            }
+        });
+
         lc.getData().add(series);
+        getChildren().add(textField);
+        getChildren().add(button);
         getChildren().add(myB);
         getChildren().add(lc);
     }
@@ -39,11 +57,9 @@ public class MyChart extends VBox {
                 Runnable updater = new Runnable() {
                     @Override
                     public void run() {
-                            series.getData().add(new XYChart.Data<>(Double.valueOf(x++), Math.random()));
+                            series.getData().add(new XYChart.Data<>((double) x++, Math.random()));
                             if (series.getData().size() > 100) {
                                 series.getData().remove(0);
-                                //xAxis.setLowerBound(series.getData().get(0).getXValue());
-                                //xAxis.setUpperBound(series.getData().get(series.getData()).getXValue());
                             }
 
                     }
@@ -61,6 +77,7 @@ public class MyChart extends VBox {
     }
 
     public void add(Double d){
-        series.getData().add(new XYChart.Data<>(Double.valueOf(x++),d));
+        series.getData().add(new XYChart.Data<>((double) x,d));
+        x++;
     }
 }

@@ -30,6 +30,7 @@ public class ChartUpdater extends Thread {
             });
             Platform.runLater(updater);
             ss.close();
+            run();
         } catch (Exception e) {
             System.err.println(e);
         }
